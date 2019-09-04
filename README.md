@@ -30,7 +30,7 @@ BarBar Food Is an Aplication for Everyone Choose Food
 - Detail Transaction
 - Point Of Sale Aplication
 
-## Why Papa Kost
+## Why BarBar Food
 
 - Esay To Use this Application
 - It's React Native, so it support android & iOS by default
