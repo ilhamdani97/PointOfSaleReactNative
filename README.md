@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="./image/papakost.png" width="300"/><br>
+  <img src="./src/assets/image/logo.png" width="300"/><br>
 </h1>
 
 ## Important 
@@ -7,30 +7,28 @@
 This project is still on very early development stage. If you want to use for production, use it with your own risk.
 <br>More feature Coming Really Soon.
 
-## Papa Kost
+## BarBar Food
 
-Papa Kost Is an Aplication for Everyone finding boarding house
+BarBar Food Is an Aplication for Everyone Choose Food 
 
 ## Screenshots
 
 <p float="left">
-  <img src="./image/home.PNG" width="200" height="350" alt="Choose a Service Type"/>
+  <img src="./src/assets/scereenapp/home.jpeg" width="200" height="350" alt="Input Table"/>
 
-  <img src="./image/login.PNG" width="200" height="350" alt="Pick Location"/>
+  <img src="./src/assets/scereenapp/menu.jpeg" width="200" height="350" alt="Choose Menu"/>
 
-  <img src="./image/register.PNG" width="200" height="350" alt="Finding the truck"/>
+  <img src="./src/assets/scereenapp/bill.jpeg" width="200" height="350" alt="Bill Order"/>
 
-  <img src="./image/profile.PNG" width="200" height="350" alt="Order History"/>
+  <img src="./src/assets/scereenapp/finish.jpeg" width="200" height="350" alt="Order Finish"/>
 </p>
 
 ## Fitures
 
-- Choose House
-- House Detail
-- Booking List
-- Login
-- Register
-- Add Ads
+- Choose Table
+- Choose Trancation
+- Detail Transaction
+- Point Of Sale Aplication
 
 ## Why Papa Kost
 
@@ -56,8 +54,8 @@ follow these steps to install
 ### Frontend
 
 ```bash
-git clone https://github.com/ilhamdani97/papakost
-cd papakost
+git clone https://github.com/ilhamdani97/PointOfSaleReactNative
+cd PointOfSaleReactNative
 npm install
 npm start
 react-native run-ios #for ios
@@ -73,8 +71,8 @@ API_URL=http://YOUR_DOMAIN:YOUR_PORT
 ### Backend
 
 ```bash
-git clone https://github.com/chazi13/carikost-api.git
-cd carikost-api
+git clone https://github.com/ilhamdani97/APIPointOfSale
+cd APIPointOfSale
 npm install
 npm install nodemon -D
 npm start
@@ -86,10 +84,8 @@ npm start
 - Hire Us
 
   * [Ilham Ramadani](https://www.linkedin.com/in/ilham-ramadani-a38256117/)
-  * [Taufiek Maulana](https://www.linkedin.com/in/taufiek-maulana-30ba74137/)
   ## Contact
 
 - WA/TELEGRAM: +62 1372374345 (Ilham Ramadani)
-- WA/TELEGRAM: +62 85703018642 (Taufiek Maulana)
 
 ## Download App (Demo usage only)
