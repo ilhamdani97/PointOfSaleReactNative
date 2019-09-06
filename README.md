@@ -88,4 +88,5 @@ npm start
 
 - WA/TELEGRAM: +62 1372374345 (Ilham Ramadani)
 
-## Download App (Demo usage only)
+## Download App APK (Demo usage only)
+ * [BarBar Food](https://bit.ly/2kynujY)

@@ -18,6 +18,12 @@ const addmenus = (state = initialState, action) => {
         ...state,
         data: removeMenu
     }
+    case types.UPDATE_QTY: 
+    return {
+      ...state,
+       isLoading:false,
+        data:action.payload
+    };
     case types.ADD_DATA_ORDER:
       return {
         ...state,

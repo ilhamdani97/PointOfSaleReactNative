@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Item, Input, Icon } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
-import { URLSTORE } from 'react-native-dotenv'
+import { URLAPI } from 'react-native-dotenv'
 class Home extends Component {
     constructor(props) {
         super(props)
@@ -23,7 +23,7 @@ class Home extends Component {
             let tempTable = {
                 tableNumber: this.state.tableNumber
             }
-            await axios.post(`${URLSTORE}transactions`, {
+            await axios.post(`${URLAPI}transactions`, {
                 tableNumber: tempTable.tableNumber
             })
                 .then((response) => {
@@ -79,8 +79,8 @@ class Home extends Component {
                                 
                                 
                                     <Image
-                                        style={{ width: 24, height: 24,marginLeft:18,marginTop:14}}
-                                        source={require('../../assets/image/coffee-table.png')}
+                                        style={{ width: 38, height: 38,marginLeft:11,marginTop:7}}
+                                        source={require('../../assets/image/chair.png')}
                                     />
                                 
                             </View>

@@ -6,7 +6,7 @@ import { Card, Icon } from "react-native-elements";
 import { connect } from 'react-redux';
 import * as actionOrder from '../../redux/actions/orders';
 import axios from "axios";
-import { URLSTORE } from 'react-native-dotenv'
+import { URLAPI } from 'react-native-dotenv'
 
 class Menu extends Component {
     static navigationOptions =
@@ -59,7 +59,7 @@ class Menu extends Component {
     onCallBill = async () => {
         try {
             await axios({
-                url: `${URLSTORE}truncate`,
+                url: `${URLAPI}truncate`,
                 method: 'get'
             })
                 .then((response) => {
@@ -74,7 +74,7 @@ class Menu extends Component {
     }
     render() {
         const totalS = this.props.orders.data;
-        const foodTotal = totalS.reduce((totalAll, total) => totalAll + total.price, 0);
+        const foodTotal = totalS.reduce((totalAll, total) => totalAll + total.price*total.qty, 0);
         const service = foodTotal * 5.5 / 100
         const tax = foodTotal * 10 / 100
         const total = foodTotal + service + tax
@@ -136,7 +136,7 @@ class Menu extends Component {
                                                 <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#757575', marginTop: 2, marginLeft: 6, marginRight: 2 }}>{item.qty}</Text>
                                             </View>
                                         </View>
-                                        <View style={{ width: width * 10 / 100, height: 30, marginTop: 20 }}>
+                                        <View style={{ width: width * 8/ 100, height: 30, marginTop: 20 }}>
                                             <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#757575' }}>X</Text>
                                         </View>
                                         <View style={{ width: width * 48 / 100, height: 30, marginLeft: 4, marginTop: 6 }} >
@@ -144,7 +144,7 @@ class Menu extends Component {
                                             <Text style={{ fontSize: 16, color: '#757575' }}> Rp.{item.price}</Text>
                                         </View>
                                         <View style={{ width: width * 30 / 100, height: 30, marginTop: 14 }} >
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FF8A65' }}>{this.toRupiah(item.price)}</Text>
+                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FF8A65' }}>{this.toRupiah(item.price*item.qty)}</Text>
                                         </View>
                                     </View>
                                     <View style={{ borderWidth: 1, borderColor: '#9E9E9E', margin: 10, }} />
@@ -167,7 +167,7 @@ class Menu extends Component {
                                 <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', }}>Discount</Text>
                             </View>
                             <View style={{ width: width * 30 / 100, height: 35, }} >
-                                <Text style={{ fontSize: 19, color: '#616161', marginLeft:14 }}> - </Text>
+                                <Text style={{ textAlign: 'right',fontSize: 19, color: '#616161', marginLeft:14 }}> - </Text>
                             </View>
 
                         </View>

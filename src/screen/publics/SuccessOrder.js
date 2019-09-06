@@ -12,7 +12,7 @@ class SuccessOrder extends Component {
                 <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161',marginTop:20 }}>Please Bring This To The Casir, Thank's</Text>
                 <Button style={{ height: 40, borderRadius: 25, backgroundColor: '#FF8A65',marginTop:20 }} color="black" mode="contained" onPress={() => this.props.navigation.navigate('Home')}
                         >
-                            Go To Home
+                            <Text style={{marginTop:8}}>Go To Home</Text>
                         </Button>
             </View>
         )

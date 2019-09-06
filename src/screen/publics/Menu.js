@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, TextInput, Image, ActivityIndicator, Text, Dimensions, Share, ScrollView, TouchableHighlight } from 'react-native';
+import { StyleSheet,Alert, TextInput, Image, ActivityIndicator, Text, Dimensions, Share, ScrollView, TouchableHighlight } from 'react-native';
 import { Appbar, Button } from 'react-native-paper';
 import { View } from 'native-base';
 import { Card, Icon } from "react-native-elements";
@@ -7,8 +7,7 @@ import { connect } from 'react-redux';
 import * as actionMenus from '../../redux/actions/menus';
 import * as addMenus from '../../redux/actions/addmenus';
 import axios from 'axios'
-import AsyncStorage from '@react-native-community/async-storage';
-import { URLSTORE } from 'react-native-dotenv'
+import { URLAPI } from 'react-native-dotenv'
 class Menu extends Component {
     static navigationOptions =
         {
@@ -43,25 +42,50 @@ class Menu extends Component {
 
         )
     }
+    
     handleAddMenus = item => () => {
-        this.props.addMenus({ id: item.id, menuId: item.id,categoryId:item.categoryId, transactionId: 2, name: item.name, price: item.price, qty: 1 })
+        const findMenu = this.props.addmenus.data.findIndex(order => {
+            return order.menu.id === item.id;
+          });
+          if (findMenu == -1) {
+            console.log('hai dd')
+            this.props.addMenus({ menu:item,qty: 1});
+          } else {
+            let orders = this.props.addmenus;
+            orders.data[findMenu].qty += 1;
+            this.props.updateQty(orders.data);
+          }
     }
-    handleRemove = item => () => {
-        this.props.removeMenu(item.id)
+    handleRemove = item =>() => {
+        let orders = this.props.addmenus;
+        const menuIndex = this.props.addmenus.data.findIndex(order => {
+            return order.menu.id === item.menu.id;
+          });
+    
+    if (orders.data[menuIndex].qty > 1) {
+        console.log(orders)
+        orders.data[menuIndex].qty -= 1;
+        this.props.updateQty(orders.data);
+    } else {
+        let orders = this.props.addmenus;  
+      orders.data.splice(menuIndex, 1);
+      this.props.updateQty(orders.data);
+    }
     }
     handlePostOrder = item => () => {
         this.props.addOrder(item)
     }
+    
     onAdd = async (item) => {
         try {
             let data = item
             await axios({
-                url: `${URLSTORE}order`,
+                url: `${URLAPI}order`,
                 method: 'post',
                 data: data
             })
                 .then((response) => {
-                    alert('Success Add Order, Click Bill To Next ')
+                    this.props.navigation.navigate('Order')
                 })
                 .catch((error) => {
                     console.log(error)
@@ -141,7 +165,6 @@ class Menu extends Component {
                                     </View>
                                 }
                                 </View>
-                            
                             ))}
                             <View style={{ flex: 1, flexDirection: 'row', marginTop: 10 }}>
                                 <View style={{ width: width * 55 / 100, height: 40, borderRadius: 40, marginLeft: 20 }} >
@@ -183,52 +206,25 @@ class Menu extends Component {
                 </ScrollView>
                 <View style={{ position: 'absolute', bottom: 0, alignSelf: 'center', borderTopColor: "#FF8A65", backgroundColor: "#FFFFFF", width: width * 100 / 100, height: 60, borderTopWidth: 2 }}>
                     <View style={{ flex: 1, flexDirection: 'row', marginTop: 8, }}>
-                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {this.props.addmenus.data.map((item, i) => (
 
                                 <View key={i} style={{
                                     width: width * 23 / 100, height: 54, alignItems: 'center',
                                     justifyContent: 'center',
                                 }}>
-                                    {item.categoryId === 4 &&
+                                    
                                     <TouchableHighlight onPress={this.handleRemove(item)} underlayColor="white">
-                                        <Image
-                                            style={{ width: 27, height: 27 }}
-                                            source={require('../../assets/image/ramen.png')}
-                                        />
+                                        <View style={{ height: 28, width: 28, backgroundColor: "#FF8A65", borderRadius: 50 , marginBottom:4}}>
+                                    <Text style={{color:'white',fontSize:18, marginLeft:6,marginTop:3,}}> {item.qty}</Text>
+                                    </View>
                                     </TouchableHighlight>
-                                     }
-                                     {item.categoryId === 5 &&
-                                    <TouchableHighlight onPress={this.handleRemove(item)} underlayColor="white">
-                                        <Image
-                                            style={{ width: 27, height: 27 }}
-                                            source={require('../../assets/image/juice.png')}
-                                        />
-                                    </TouchableHighlight>
-                                     }
-                                    <Text style={{ fontSize: 12 }}>{item.name}</Text>
+                                    <Text style={{ fontSize: 12 }}>{item.menu.name}</Text>
                                 </View>
 
                             ))}
-                        </ScrollView>
-                        <View style={{ width: 50, height: 50 }}>
-                            <View style={{ height: 48, width: 48, backgroundColor: "#FF8A65", borderRadius: 50 }}>
-                                {this.props.addmenus.data.length === 0 &&
-
-                                    <Image
-                                        style={{ width: 24, height: 24, margin: 12 }}
-                                        source={require('../../assets/image/no-stopping.png')}
-                                    />
-                                }
-                                <TouchableHighlight onPress={() => this.onAdd(this.props.addmenus.data)} underlayColor="white">
-                                    <Image
-                                        style={{ width: 24, height: 24, margin: 12 }}
-                                        source={require('../../assets/image/shopping-bag.png')}
-                                    />
-                                </TouchableHighlight>
-                            </View>
-
-                        </View>
+                        </ScrollView> 
+                        
                         <View style={{ width: 50, height: 50, marginRight: 10, marginLeft: 4 }} >
 
                             <View style={{ height: 48, width: 48, backgroundColor: "#FF8A65", borderRadius: 50 }}>
@@ -240,14 +236,14 @@ class Menu extends Component {
                                     />
 
                                 }
-                                <TouchableHighlight onPress={() => this.props.navigation.navigate('Order')} underlayColor="white">
+                                <TouchableHighlight onPress={() => this.onAdd(this.props.addmenus.data)} underlayColor="transparent">
                                     <Image
-                                        style={{ width: 24, height: 24, margin: 12 }}
-                                        source={require('../../assets/image/purse.png')}
+                                        style={{ width: 34, height: 34, marginLeft:10,marginTop:6 }}
+                                        source={require('../../assets/image/invoice.png')}
                                     />
                                 </TouchableHighlight>
                             </View>
-                        </View>
+                        </View> 
                     </View>
                 </View>
             </View>
@@ -265,7 +261,8 @@ const mapDispatchToProps = dispatch => {
         getData: () => dispatch(actionMenus.getData()),
         addMenus: (value) => dispatch(addMenus.addMenus(value)),
         removeMenu: (id) => dispatch(addMenus.removeMenu(id)),
-        addOrder: (value) => dispatch(addMenus.addOrder(value))
+        addOrder: (value) => dispatch(addMenus.addOrder(value)),
+        updateQty: (value) => dispatch(addMenus.updateQty(value)),
     }
 }
 const styles = StyleSheet.create({
