@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Image, FlatList, ActivityIndicator, Text, Dimensions, TouchableOpacity, Share, ScrollView, TouchableHighlight } from 'react-native';
 import { Appbar, Button } from 'react-native-paper';
 import { View } from 'native-base';
-import { Card, Icon } from "react-native-elements";
+import CountDown from 'react-native-countdown-component';
 import { connect } from 'react-redux';
 import * as actionOrder from '../../redux/actions/orders';
 import axios from "axios";
@@ -23,22 +23,10 @@ class Menu extends Component {
         this.state = {
             Order: [],
             data: null,
-            countOrder: 1,
+            totalDuration: 0,
             total: this.props.orders.data.orders
         };
     }
-
-    // plusCount = () => {
-    //     this.setState({
-    //         countOrder: this.state.countOrder + 1
-    //     })
-    // }
-    // minCount = () => {
-    //     this.setState({
-    //         countOrder: this.state.countOrder - 1
-    //     })
-    // }
-
     toRupiah = (price) => {
         let rupiah = '';
         let jumlah = (rupiah)
@@ -49,7 +37,6 @@ class Menu extends Component {
     componentDidMount() {
         this.props.getData(),
             this.state.total = this.props
-
     }
     async componentWillMount() {
         this.setState(
@@ -74,7 +61,7 @@ class Menu extends Component {
     }
     render() {
         const totalS = this.props.orders.data;
-        const foodTotal = totalS.reduce((totalAll, total) => totalAll + total.price*total.qty, 0);
+        const foodTotal = totalS.reduce((totalAll, total) => totalAll + total.price * total.qty, 0);
         const service = foodTotal * 5.5 / 100
         const tax = foodTotal * 10 / 100
         const total = foodTotal + service + tax
@@ -84,49 +71,43 @@ class Menu extends Component {
         if (this.props.orders.isLoading == true) {
             return (
                 <ActivityIndicator
-                color="#FF8A65"
-                animating={true}
-                style={styles.indicator}
-                size="large"
-            />
+                    color="#FF8A65"
+                    animating={true}
+                    style={styles.indicator}
+                    size="large"
+                />
             );
         }
-        // if (this.props.orders.data.length == 0) {
-        //     return (
-        //         <View>
-        //         <Appbar.Header style={{ backgroundColor: 'transparent' }}>
-        //                 <Appbar.BackAction color="#FF8A65"
-        //                     onPress={() => this.props.navigation.navigate('Menu')}
-        //                 />
-        //         </Appbar.Header>
-        //         <View style={{alignContent:'center',alignItems:'center'}}>
-        //         <Image
-        //                         style={{ width: 120, height: 120 , marginTop:120}}
-        //                         source={require('../../assets/image/warning.png')}
-        //                     />
-        //         <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161',marginTop:20 }}>Please Confirm Your's Order</Text>
-                
-        //     </View>
-        //     </View>
-        //     );
-        // }
         return (
             <View style={{ backgroundColor: 'white', marginBottom: 10 }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <Appbar.Header style={{ backgroundColor: 'transparent' }}>
-                        <Appbar.BackAction color="#FF8A65"
-                            onPress={() => this.props.navigation.navigate('Menu')}
-                        />
-                    </Appbar.Header>
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 1, flexDirection: 'row' ,marginTop:20}}>
                         <View style={{ width: width * 50 / 100, height: 40, backgroundColor: '#FF8A65', borderBottomRightRadius: 40, borderTopRightRadius: 40, }} >
                             <Text style={{ color: '#FFFFFF', marginLeft: 10, marginTop: 5, fontSize: 22, fontWeight: 'bold' }}>Order Sumary</Text>
                         </View>
-                        <View style={{ width: width * 30 / 100, height: 40, backgroundColor: '#FFFFFF', borderRadius: 40, marginLeft: 2, marginTop: 6 }} >
-
+                        <View style={{ width: width * 32 / 100, height: 40, backgroundColor: '#FF8A65', borderRadius: 40, marginLeft: 10 }} >
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                                <View >
+                                    <Image
+                                        style={{ width: 26, height: 26, marginTop: 7, marginLeft: 8 }}
+                                        source={require('../../assets/image/stopwatch.png')}
+                                    />
+                                </View>
+                                <View style={{ marginLeft: 6, marginTop: 4 }}>
+                                    <CountDown
+                                        until={45}
+                                        size={12}
+                                        onFinish={() => this.onCallBill()}
+                                        digitStyle={{ backgroundColor: '#FFF' }}
+                                        digitTxtStyle={{ color: '#FF8A65' }}
+                                        timeToShow={['M', 'S']}
+                                        timeLabels={{ m: null, s: null }}
+                                    />
+                                </View>
+                            </View>
                         </View>
                     </View>
-                    <View style={{ height: 200, marginTop: 6 }}>
+                    <View style={{ height: 240, marginTop: 6 }}>
                         <ScrollView showsVerticalScrollIndicator={false}>
                             {this.props.orders.data.map((item, i) => (
                                 <View key={i}>
@@ -136,7 +117,7 @@ class Menu extends Component {
                                                 <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#757575', marginTop: 2, marginLeft: 6, marginRight: 2 }}>{item.qty}</Text>
                                             </View>
                                         </View>
-                                        <View style={{ width: width * 8/ 100, height: 30, marginTop: 20 }}>
+                                        <View style={{ width: width * 8 / 100, height: 30, marginTop: 20 }}>
                                             <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#757575' }}>X</Text>
                                         </View>
                                         <View style={{ width: width * 48 / 100, height: 30, marginLeft: 4, marginTop: 6 }} >
@@ -144,7 +125,7 @@ class Menu extends Component {
                                             <Text style={{ fontSize: 16, color: '#757575' }}> Rp.{item.price}</Text>
                                         </View>
                                         <View style={{ width: width * 30 / 100, height: 30, marginTop: 14 }} >
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FF8A65' }}>{this.toRupiah(item.price*item.qty)}</Text>
+                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FF8A65' }}>{this.toRupiah(item.price * item.qty)}</Text>
                                         </View>
                                     </View>
                                     <View style={{ borderWidth: 1, borderColor: '#9E9E9E', margin: 10, }} />
@@ -157,8 +138,8 @@ class Menu extends Component {
                             <View style={{ width: width * 64 / 100, height: 35, marginTop: 10 }}>
                                 <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', }}>Sub Total</Text>
                             </View>
-                            <View style={{ width: width * 30 / 100, height: 35, marginTop: 10, marginLeft:14 }} >
-                                <Text style={{ textAlign: 'right',fontSize: 19, color: '#616161', }}>{this.toRupiah(foodTotal)}</Text>
+                            <View style={{ width: width * 30 / 100, height: 35, marginTop: 10, marginLeft: 14 }} >
+                                <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', }}>{this.toRupiah(foodTotal)}</Text>
                             </View>
 
                         </View>
@@ -167,7 +148,7 @@ class Menu extends Component {
                                 <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', }}>Discount</Text>
                             </View>
                             <View style={{ width: width * 30 / 100, height: 35, }} >
-                                <Text style={{ textAlign: 'right',fontSize: 19, color: '#616161', marginLeft:14 }}> - </Text>
+                                <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', marginLeft: 14 }}> - </Text>
                             </View>
 
                         </View>
@@ -176,7 +157,7 @@ class Menu extends Component {
                                 <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', }}>Service Charge (5.5 %)</Text>
                             </View>
                             <View style={{ width: width * 30 / 100, height: 35, }} >
-                                <Text style={{textAlign: 'right', fontSize: 19, color: '#616161', marginLeft:14}}>{this.toRupiah(service)}</Text>
+                                <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', marginLeft: 14 }}>{this.toRupiah(service)}</Text>
                             </View>
 
                         </View>
@@ -185,7 +166,7 @@ class Menu extends Component {
                                 <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', }}>Tax (10 %)</Text>
                             </View>
                             <View style={{ width: width * 30 / 100, height: 35, }} >
-                                <Text style={{ textAlign: 'right',fontSize: 19, color: '#616161', marginLeft:14}}>{this.toRupiah(tax)}</Text>
+                                <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', marginLeft: 14 }}>{this.toRupiah(tax)}</Text>
                             </View>
 
                         </View>
@@ -194,7 +175,7 @@ class Menu extends Component {
                                 <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', fontWeight: 'bold' }}>Total</Text>
                             </View>
                             <View style={{ width: width * 30 / 100, height: 35, }} >
-                                <Text style={{textAlign: 'right', fontSize: 19, color: '#616161', marginLeft:14}}>{this.toRupiah(total)}</Text>
+                                <Text style={{ textAlign: 'right', fontSize: 19, color: '#616161', marginLeft: 14 }}>{this.toRupiah(total)}</Text>
                             </View>
 
                         </View>
@@ -210,8 +191,8 @@ class Menu extends Component {
 
             </View>
         );
-        }
-    
+    }
+
 }
 
 const mapStateToProps = state => {
