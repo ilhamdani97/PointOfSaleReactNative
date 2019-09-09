@@ -33,6 +33,21 @@ class Menu extends Component {
         for (var i = 0; i < convert.length; i++) if (i % 3 == 0) rupiah += convert.substr(i, 3) + '.';
         return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
     }
+    confirm = () =>{
+        Alert.alert(
+            'BarBar Food Message',
+            'Are You Sure for This Order ?',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {text: 'OK', onPress: () => this.onAdd(this.props.addmenus.data)},
+            ],
+            {cancelable: false},
+          );
+    }
     componentDidMount() {
         this.props.getData()
     }
@@ -75,7 +90,6 @@ class Menu extends Component {
     handlePostOrder = item => () => {
         this.props.addOrder(item)
     }
-    
     onAdd = async (item) => {
         try {
             let data = item
@@ -234,14 +248,15 @@ class Menu extends Component {
                                         style={{ width: 24, height: 24, margin: 12 }}
                                         source={require('../../assets/image/no-stopping.png')}
                                     />
-
                                 }
-                                <TouchableHighlight onPress={() => this.onAdd(this.props.addmenus.data)} underlayColor="transparent">
+                                {this.props.addmenus.data.length > 0 &&
+                                <TouchableHighlight onPress={() => this.confirm()} underlayColor="transparent">
                                     <Image
                                         style={{ width: 34, height: 34, marginLeft:10,marginTop:6 }}
                                         source={require('../../assets/image/invoice.png')}
                                     />
                                 </TouchableHighlight>
+                                }
                             </View>
                         </View> 
                     </View>
