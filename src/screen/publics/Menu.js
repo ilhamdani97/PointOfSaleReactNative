@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet,Alert, TextInput, Image, ActivityIndicator, Text, Dimensions, Share, ScrollView, TouchableHighlight } from 'react-native';
+import { StyleSheet, Alert, TextInput, Image, ActivityIndicator, Text, Dimensions, Share, ScrollView, TouchableHighlight } from 'react-native';
 import { Appbar, Button } from 'react-native-paper';
 import { View } from 'native-base';
 import { Card, Icon } from "react-native-elements";
@@ -33,20 +33,20 @@ class Menu extends Component {
         for (var i = 0; i < convert.length; i++) if (i % 3 == 0) rupiah += convert.substr(i, 3) + '.';
         return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
     }
-    confirm = () =>{
+    confirm = () => {
         Alert.alert(
             'BarBar Food Message',
             'Are You Sure for This Order ?',
             [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              {text: 'OK', onPress: () => this.onAdd(this.props.addmenus.data)},
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: () => this.onAdd(this.props.addmenus.data) },
             ],
-            {cancelable: false},
-          );
+            { cancelable: false },
+        );
     }
     componentDidMount() {
         this.props.getData()
@@ -57,35 +57,34 @@ class Menu extends Component {
 
         )
     }
-    
+
     handleAddMenus = item => () => {
         const findMenu = this.props.addmenus.data.findIndex(order => {
             return order.menu.id === item.id;
-          });
-          if (findMenu == -1) {
-            console.log('hai dd')
-            this.props.addMenus({ menu:item,qty: 1});
-          } else {
+        });
+        if (findMenu == -1) {
+            this.props.addMenus({ menu: item, qty: 1 });
+        } else {
             let orders = this.props.addmenus;
             orders.data[findMenu].qty += 1;
             this.props.updateQty(orders.data);
-          }
+        }
     }
-    handleRemove = item =>() => {
+    handleRemove = item => () => {
         let orders = this.props.addmenus;
         const menuIndex = this.props.addmenus.data.findIndex(order => {
             return order.menu.id === item.menu.id;
-          });
-    
-    if (orders.data[menuIndex].qty > 1) {
-        console.log(orders)
-        orders.data[menuIndex].qty -= 1;
-        this.props.updateQty(orders.data);
-    } else {
-        let orders = this.props.addmenus;  
-      orders.data.splice(menuIndex, 1);
-      this.props.updateQty(orders.data);
-    }
+        });
+
+        if (orders.data[menuIndex].qty > 1) {
+            console.log(orders)
+            orders.data[menuIndex].qty -= 1;
+            this.props.updateQty(orders.data);
+        } else {
+            let orders = this.props.addmenus;
+            orders.data.splice(menuIndex, 1);
+            this.props.updateQty(orders.data);
+        }
     }
     handlePostOrder = item => () => {
         this.props.addOrder(item)
@@ -122,144 +121,132 @@ class Menu extends Component {
         }
         return (
             <View style={{ backgroundColor: 'white', marginBottom: 10 }}>
-                <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 62 }}>
-                    <Appbar.Header style={{ backgroundColor: '#FF8A65' }}>
-                        <Appbar.BackAction color="white"
-                            onPress={() => this.props.navigation.goBack()}
+                <Appbar.Header style={{ backgroundColor: '#FF8A65' }}>
+                    <Appbar.BackAction color="white"
+                        onPress={() => this.props.navigation.goBack()}
+                    />
+                </Appbar.Header>
+                <View style={{ flexDirection: 'row', backgroundColor: '#FF8A65', position: 'absolute', marginTop: 56 }}>
+                    <View style={{ padding: 100, flex: 1, height: 100 }} />
+                </View>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ width: width * 70 / 100, height: 80, backgroundColor: '#FF8A65', borderRadius: 40, marginLeft: 20 }} >
+                        <Image
+                            style={{ width: 234, height: 49 }}
+                            source={require('../../assets/image/logo.png')}
                         />
-
-                    </Appbar.Header>
-                    <View style={{ flexDirection: 'row', backgroundColor: '#FF8A65', position: 'absolute', marginTop: 56 }}>
-                        <View style={{ padding: 100, flex: 1, height: 100 }} />
                     </View>
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                        <View style={{ width: width * 70 / 100, height: 80, backgroundColor: '#FF8A65', borderRadius: 40, marginLeft: 20 }} >
-                            <Image
-                                style={{ width: 234, height: 49 }}
-                                source={require('../../assets/image/logo.png')}
-                            />
-                        </View>
-                        <View style={{ width: width * 30 / 100, height: 40, backgroundColor: '#FFFFFF', borderRadius: 40, marginLeft: 2, marginTop: 6 }} >
-                            <Text style={{ color: '#757575', marginLeft: 10, marginTop: 10, fontSize: 16 }}>Table : {params.dataTable}</Text>
-                        </View>
+                    <View style={{ width: width * 30 / 100, height: 40, backgroundColor: '#FFFFFF', borderRadius: 40, marginLeft: 2, marginTop: 6 }} >
+                        <Text style={{ color: '#757575', marginLeft: 10, marginTop: 10, fontSize: 16 }}>Table : {params.dataTable}</Text>
                     </View>
-                    <View style={{ backgroundColor: 'white', height: 360, borderTopLeftRadius: 80 }}>
-                        <ScrollView showsVerticalScrollIndicator={false} style={{borderTopLeftRadius: 80, marginTop:16}} >
-                            <View style={{ flex: 1, flexDirection: 'row', marginTop: 10 }}>
-                                <View style={{ width: width * 55 / 100, height: 40, borderRadius: 40, marginLeft: 20 }} >
+                </View>
+                <View style={{ backgroundColor: 'white', height: height * 75 / 100, borderTopLeftRadius: 80, marginTop: 80 }}>
+                    <ScrollView showsVerticalScrollIndicator={false} style={{ borderTopLeftRadius: 80, marginTop: 16, marginBottom: 10 }} >
+                        <View style={{ flex: 1, flexDirection: 'row', marginTop: 10 }}>
+                            <View style={{ width: width * 55 / 100, height: 40, borderRadius: 40, marginLeft: 20 }} >
 
-                                </View>
-                                <View style={{ width: width * 44 / 100, height: 40, backgroundColor: '#FF8A65', borderRadius: 40, marginLeft: 2, marginTop: 6 }} >
-                                    <Text style={{ color: '#FFFFFF', marginLeft: 10, marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>Food</Text>
-                                </View>
                             </View>
+                            <View style={{ width: width * 44 / 100, height: 40, backgroundColor: '#FF8A65', borderRadius: 40, marginLeft: 2, marginTop: 6 }} >
+                                <Text style={{ color: '#FFFFFF', marginLeft: 10, marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>Food</Text>
+                            </View>
+                        </View>
 
-                            { this.props.menus.data.map((item, i) => (
-                                <View key={i}>
+                        {this.props.menus.data.map((item, i) => (
+                            <View key={i} style={{ marginBottom: 5 }}>
                                 {item.categoryId === 4 &&
-                                    <View  style={{ flex: 1, flexDirection: 'row', marginLeft: 30, marginTop: 20 }} >
-                                    <View style={{ width: width * 18 / 100, height: 54, }}>
-                                        <Image
-                                            style={{ width: 52, height: 52 }}
-                                            source={require('../../assets/image/ramen.png')}
-                                        />
-                                    </View>
-                                    <View style={{ width: width * 58 / 100, height: 30, marginLeft: 4, marginTop: 6 }} >
-                                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#757575' }}>{item.name}</Text>
-                                        <Text style={{ fontSize: 16, color: '#757575' }}>{this.toRupiah(item.price)}</Text>
-                                    </View>
-                                    <TouchableHighlight onPress={this.handleAddMenus(item)} underlayColor="white">
-                                        <View style={{ width: width * 12 / 100, height: 30, marginTop: 14 }} >
+                                    <View style={{ flex: 1, flexDirection: 'row', marginLeft: 30, marginTop: 20 }} >
+                                        <View style={{ width: width * 18 / 100, height: 54, }}>
                                             <Image
-                                                style={{ width: 20, height: 20 }}
-                                                source={require('../../assets/image/add.png')}
+                                                style={{ width: 52, height: 52 }}
+                                                source={require('../../assets/image/ramen.png')}
                                             />
                                         </View>
-                                    </TouchableHighlight>
+                                        <View style={{ width: width * 58 / 100, height: 30, marginLeft: 4, marginTop: 6 }} >
+                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#757575' }}>{item.name}</Text>
+                                            <Text style={{ fontSize: 16, color: '#757575' }}>{this.toRupiah(item.price)}</Text>
+                                        </View>
+                                        <TouchableHighlight onPress={this.handleAddMenus(item)} underlayColor="white">
+                                            <View style={{ width: width * 12 / 100, height: 30, marginTop: 14 }} >
+                                                <Image
+                                                    style={{ width: 20, height: 20 }}
+                                                    source={require('../../assets/image/add.png')}
+                                                />
+                                            </View>
+                                        </TouchableHighlight>
                                     </View>
                                 }
-                                </View>
-                            ))}
-                            <View style={{ flex: 1, flexDirection: 'row', marginTop: 10 }}>
-                                <View style={{ width: width * 55 / 100, height: 40, borderRadius: 40, marginLeft: 20 }} >
-
-                                </View>
-                                <View style={{ width: width * 44 / 100, height: 40, backgroundColor: '#FF8A65', borderRadius: 40, marginLeft: 2, marginTop: 6 }} >
-                                    <Text style={{ color: '#FFFFFF', marginLeft: 10, marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>Drink</Text>
-                                </View>
                             </View>
-                            { this.props.menus.data.map((item, i) => (
-                                <View key={i}>
+                        ))}
+                        <View style={{ flex: 1, flexDirection: 'row', marginTop: 10 }}>
+                            <View style={{ width: width * 55 / 100, height: 40, borderRadius: 40, marginLeft: 20 }} >
+
+                            </View>
+                            <View style={{ width: width * 44 / 100, height: 40, backgroundColor: '#FF8A65', borderRadius: 40, marginLeft: 2, marginTop: 6 }} >
+                                <Text style={{ color: '#FFFFFF', marginLeft: 10, marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>Drink</Text>
+                            </View>
+                        </View>
+                        {this.props.menus.data.map((item, i) => (
+                            <View key={i}>
                                 {item.categoryId === 5 &&
-                                    <View  style={{ flex: 1, flexDirection: 'row', marginLeft: 30, marginTop: 20 ,marginBottom:10}} >
-                                    <View style={{ width: width * 18 / 100, height: 54, }}>
-                                        <Image
-                                            style={{ width: 52, height: 52 }}
-                                            source={require('../../assets/image/juice.png')}
-                                        />
-                                    </View>
-                                    <View style={{ width: width * 58 / 100, height: 30, marginLeft: 4, marginTop: 6 }} >
-                                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#757575' }}>{item.name}</Text>
-                                        <Text style={{ fontSize: 16, color: '#757575' }}>{this.toRupiah(item.price)}</Text>
-                                    </View>
-                                    <TouchableHighlight onPress={this.handleAddMenus(item)} underlayColor="white">
-                                        <View style={{ width: width * 12 / 100, height: 30, marginTop: 14 }} >
+                                    <View style={{ flex: 1, flexDirection: 'row', marginLeft: 30, marginTop: 20, marginBottom: 10 }} >
+                                        <View style={{ width: width * 18 / 100, height: 54, }}>
                                             <Image
-                                                style={{ width: 20, height: 20 }}
-                                                source={require('../../assets/image/add.png')}
+                                                style={{ width: 52, height: 52 }}
+                                                source={require('../../assets/image/juice.png')}
                                             />
                                         </View>
-                                    </TouchableHighlight>
+                                        <View style={{ width: width * 58 / 100, height: 30, marginLeft: 4, marginTop: 6 }} >
+                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#757575' }}>{item.name}</Text>
+                                            <Text style={{ fontSize: 16, color: '#757575' }}>{this.toRupiah(item.price)}</Text>
+                                        </View>
+                                        <TouchableHighlight onPress={this.handleAddMenus(item)} underlayColor="white">
+                                            <View style={{ width: width * 12 / 100, height: 30, marginTop: 14 }} >
+                                                <Image
+                                                    style={{ width: 20, height: 20 }}
+                                                    source={require('../../assets/image/add.png')}
+                                                />
+                                            </View>
+                                        </TouchableHighlight>
                                     </View>
-                                }
-                                </View>
-                            
-                            ))}
-                        </ScrollView>
-                    </View>
-                </ScrollView>
-                <View style={{ position: 'absolute', bottom: 0, alignSelf: 'center', borderTopColor: "#FF8A65", backgroundColor: "#FFFFFF", width: width * 100 / 100, height: 60, borderTopWidth: 2 }}>
-                    <View style={{ flex: 1, flexDirection: 'row', marginTop: 8, }}>
-                          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                            {this.props.addmenus.data.map((item, i) => (
-
-                                <View key={i} style={{
-                                    width: width * 23 / 100, height: 54, alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}>
-                                    
-                                    <TouchableHighlight onPress={this.handleRemove(item)} underlayColor="white">
-                                        <View style={{ height: 28, width: 28, backgroundColor: "#FF8A65", borderRadius: 50 , marginBottom:4}}>
-                                    <Text style={{color:'white',fontSize:18, marginLeft:6,marginTop:3,}}> {item.qty}</Text>
-                                    </View>
-                                    </TouchableHighlight>
-                                    <Text style={{ fontSize: 12 }}>{item.menu.name}</Text>
-                                </View>
-
-                            ))}
-                        </ScrollView> 
-                        
-                        <View style={{ width: 50, height: 50, marginRight: 10, marginLeft: 4 }} >
-
-                            <View style={{ height: 48, width: 48, backgroundColor: "#FF8A65", borderRadius: 50 }}>
-                                {this.props.addmenus.data.length === 0 &&
-
-                                    <Image
-                                        style={{ width: 24, height: 24, margin: 12 }}
-                                        source={require('../../assets/image/no-stopping.png')}
-                                    />
-                                }
-                                {this.props.addmenus.data.length > 0 &&
-                                <TouchableHighlight onPress={() => this.confirm()} underlayColor="transparent">
-                                    <Image
-                                        style={{ width: 34, height: 34, marginLeft:10,marginTop:6 }}
-                                        source={require('../../assets/image/invoice.png')}
-                                    />
-                                </TouchableHighlight>
                                 }
                             </View>
-                        </View> 
-                    </View>
+
+                        ))}
+                    </ScrollView>
+                    {this.props.addmenus.data.length > 0 &&
+                        <View style={{ position: 'absolute', bottom: 0, alignSelf: 'center', borderTopColor: "#FF8A65", backgroundColor: "#FFFFFF", width: width * 100 / 100, height: 80, borderTopWidth: 2 }}>
+                            <View style={{ flex: 1, flexDirection: 'row', marginTop: 8, }}>
+                                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                                    {this.props.addmenus.data.map((item, i) => (
+
+                                        <View key={i} style={{
+                                            width: width * 23 / 100, height: 54, alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}>
+
+                                            <TouchableHighlight onPress={this.handleRemove(item)} underlayColor="white">
+                                                <View style={{ height: 28, width: 28, backgroundColor: "#FF8A65", borderRadius: 50, marginBottom: 4 }}>
+                                                    <Text style={{ color: 'white', fontSize: 18, marginLeft: 6, marginTop: 3, }}> {item.qty}</Text>
+                                                </View>
+                                            </TouchableHighlight>
+                                            <Text style={{ fontSize: 12 }}>{item.menu.name}</Text>
+                                        </View>
+
+                                    ))}
+                                </ScrollView>
+                                <View style={{ width: 50, height: 50, marginRight: 10, marginLeft: 4 }} >
+                                    <View style={{ height: 48, width: 48, backgroundColor: "#FF8A65", borderRadius: 50 }}>
+                                        <TouchableHighlight onPress={() => this.confirm()} underlayColor="transparent">
+                                            <Image
+                                                style={{ width: 34, height: 34, marginLeft: 7, marginTop: 5 }}
+                                                source={require('../../assets/image/bill.png')}
+                                            />
+                                        </TouchableHighlight>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    }
                 </View>
             </View>
         );
