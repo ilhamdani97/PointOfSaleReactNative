@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import * as actionOrder from '../../redux/actions/orders';
 import axios from "axios";
 import { URLAPI } from 'react-native-dotenv'
+import AsyncStorage from '@react-native-community/async-storage';
 
 class Menu extends Component {
     static navigationOptions =
@@ -23,9 +24,22 @@ class Menu extends Component {
         this.state = {
             Order: [],
             data: null,
+            onloading: 0,
             totalDuration: 0,
             total: this.props.orders.data.orders
         };
+    }
+    onLoadTrue = () => {
+        this.setState({
+            onloading: this.state.onloading + 1,
+
+        })
+    }
+    onLoadFalse = () => {
+        this.setState({
+            onloading: this.state.onloading - 1,
+
+        })
     }
     toRupiah = (price) => {
         let rupiah = '';
@@ -45,15 +59,19 @@ class Menu extends Component {
     }
     onCallBill = async () => {
         try {
+            this.onLoadTrue()
             await axios({
                 url: `${URLAPI}truncate`,
                 method: 'get'
             })
                 .then((response) => {
                     this.props.navigation.navigate('SuccessOrder')
+                    this.onLoadFalse()
+                    AsyncStorage.removeItem('table')
                 })
                 .catch((error) => {
                     console.log(error)
+                    this.onLoadFalse()
                 });
         } catch{
             console.log('err')
@@ -81,7 +99,7 @@ class Menu extends Component {
         return (
             <View style={{ backgroundColor: 'white', marginBottom: 10 }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={{ flex: 1, flexDirection: 'row' ,marginTop:20}}>
+                    <View style={{ flex: 1, flexDirection: 'row', marginTop: 20 }}>
                         <View style={{ width: width * 50 / 100, height: 40, backgroundColor: '#FF8A65', borderBottomRightRadius: 40, borderTopRightRadius: 40, }} >
                             <Text style={{ color: '#FFFFFF', marginLeft: 10, marginTop: 5, fontSize: 22, fontWeight: 'bold' }}>Order Sumary</Text>
                         </View>
@@ -184,7 +202,7 @@ class Menu extends Component {
                     <View style={{ paddingLeft: 20, paddingRight: 20, marginTop: 10 }}>
                         <Button style={{ height: 40, borderRadius: 25, backgroundColor: '#FF8A65' }} color="black" mode="contained" onPress={() => this.onCallBill()}
                         >
-                            CALL BILL
+                            <Text style={{ fontSize: 18 }}>Order This</Text>
                         </Button>
                     </View>
                 </ScrollView>

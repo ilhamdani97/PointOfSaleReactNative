@@ -6,6 +6,7 @@ import { Item, Input, Icon } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
 import { URLAPI } from 'react-native-dotenv'
+
 class Home extends Component {
     constructor(props) {
         super(props)
@@ -37,7 +38,7 @@ class Home extends Component {
         })
       }
     onTable = async () => {
-        
+        let table = this.state.tableNumber
         try {
             this.onLoadTrue()
             let tempTable = {
@@ -56,10 +57,11 @@ class Home extends Component {
                     } else {
                         alert(response.data.message)
                     }
-                    AsyncStorage.setItem('id', response.data.id)
+                    AsyncStorage.setItem('table',table)
                 })
                 .catch((error) => {
                     alert(error)
+                    this.onLoadFalse()
                 })
         } catch (e) {
             console.log(e)
@@ -67,7 +69,6 @@ class Home extends Component {
     }
     render() {
         const { width, height } = Dimensions.get('window')
-        console.log(this.state.onloading)
         return (
             <View>
                 <ScrollView>
