@@ -202,7 +202,13 @@ class Menu extends Component {
                     <View style={{ paddingLeft: 20, paddingRight: 20, marginTop: 10 }}>
                         <Button style={{ height: 40, borderRadius: 25, backgroundColor: '#FF8A65' }} color="black" mode="contained" onPress={() => this.onCallBill()}
                         >
+                            {this.state.onloading === 0 &&
                             <Text style={{ fontSize: 18 }}>Order This</Text>
+                            }
+                            {this.state.onloading > 0 &&
+                            <Text style={{ fontSize: 18 }}>Please Wait . . . </Text>
+                            }
+
                         </Button>
                     </View>
                 </ScrollView>

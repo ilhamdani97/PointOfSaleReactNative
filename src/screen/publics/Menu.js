@@ -48,9 +48,14 @@ class Menu extends Component {
             onloading: this.state.onloading - 1,
         })
     }
-    onMargin = () => {
+    onMarginTrue = () => {
         this.setState({
             margin: this.state.margin = 74,
+        })
+    }
+    onMarginFalse = () => {
+        this.setState({
+            margin: this.state.margin = 10,
         })
     }
     toRupiah = (price) => {
@@ -84,7 +89,7 @@ class Menu extends Component {
         )
     }
     handleAddMenus = item => () => {
-        this.onMargin()
+        this.onMarginTrue()
         const findMenu = this.props.addmenus.data.findIndex(order => {
             return order.menu.id === item.id;
         });
@@ -101,6 +106,7 @@ class Menu extends Component {
         const menuIndex = this.props.addmenus.data.findIndex(order => {
             return order.menu.id === item.menu.id;
         });
+           
         if (orders.data[menuIndex].qty > 1) {
             orders.data[menuIndex].qty -= 1;
             this.props.updateQty(orders.data);
@@ -108,6 +114,7 @@ class Menu extends Component {
             let orders = this.props.addmenus;
             orders.data.splice(menuIndex, 1);
             this.props.updateQty(orders.data);
+            this.onMarginFalse()
         }
     }
     handlePostOrder = item => () => {
@@ -217,6 +224,7 @@ class Menu extends Component {
                         {this.props.menus.data.map((item, i) => (
                             <View key={i}>
                                 {item.categoryId === 5 &&
+                                <TouchableHighlight onPress={this.handleAddMenus(item)} underlayColor="white">
                                     <View style={{ flex: 1, flexDirection: 'row', marginLeft: 30, marginTop: 20, marginBottom: 10 }} >
                                         <View style={{ width: width * 18 / 100, height: 54, }}>
                                             <Image
@@ -228,15 +236,14 @@ class Menu extends Component {
                                             <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#757575' }}>{item.name}</Text>
                                             <Text style={{ fontSize: 16, color: '#757575' }}>{this.toRupiah(item.price)}</Text>
                                         </View>
-                                        <TouchableHighlight onPress={this.handleAddMenus(item)} underlayColor="white">
                                             <View style={{ width: width * 12 / 100, height: 30, marginTop: 14 }} >
                                                 <Image
                                                     style={{ width: 20, height: 20 }}
                                                     source={require('../../assets/image/add.png')}
                                                 />
                                             </View>
-                                        </TouchableHighlight>
                                     </View>
+                                    </TouchableHighlight>
                                 }
                             </View>
                         ))}
